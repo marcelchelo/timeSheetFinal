@@ -11,6 +11,8 @@ const prisma = new PrismaClient()
 const checkUser = asyncHandler( async(req,res, next) =>{
     const {name, email, password} = req.body
    
+    //validation 
+
     if(!name || !email || !password){
         res.status(400)
         throw new Error('Please include all fields')
@@ -24,30 +26,52 @@ const checkUser = asyncHandler( async(req,res, next) =>{
 //route    /api/users
 //$$ access public 
 
-const registerUser = asyncHandler( async (req,res,next ) =>{
+const registerUser = asyncHandler( async (req,res ) =>{
   //add error hanlder for when i cant connect to db and for when there is no user 
-  
-    try {
-        const userEmail = await prisma.user.findUnique({
+    
+    //find if User Already Exists
+    const searchEmail = req.body.email
+    const password = req.body.password
+    const name =req.body.name
+    
+        const userExists = await prisma.user.findUnique({
             where: {
-                id: 10
+                email : searchEmail
             }
         })
-        console.log('connected to DB')
-
-        if( Object.keys(userEmail).length >= 1 ){
-            return res.json(userEmail)     
-         }
         
-    } catch (error) {
-        res.status(400)
-        console.log(`Error: ${error.message}`)
-        throw new Error('No user with Such ID exists or Cant fetch DB data')
-    }
+        if( userExists ){
+            res.status(400)
+            throw new Error('User already exists')
+         }
 
-       
+        //Hash Password
+        const salt = await bcrypt.genSalt(10)
+        const haschedPassword = await bcrypt.hash(password,salt)
+
+        
+
+        //create user
+        const user = await prisma.user.create({
+           data:{
+               name: name,
+               email:searchEmail,
+               password:haschedPassword
+           }
+        })
+
+        res.status(200).json("User Created")
+
+        
+
+
+
+        
+     
     
  })
+
+
 
 
 
