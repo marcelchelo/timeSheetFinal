@@ -1,7 +1,12 @@
 const asyncHandler = require('express-async-handler')
+const bcrypt = require('bcrypt')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
+
+// $$ description
+//route    /api/users
+//$$ access public 
 
 const checkUser = asyncHandler( async(req,res, next) =>{
     const {name, email, password} = req.body
@@ -15,48 +20,39 @@ const checkUser = asyncHandler( async(req,res, next) =>{
 })
 
 
-
-
-const registerUser = asyncHandler( async (req,res ) =>{
-    const users = await prisma.user.findUnique({
-        where: {
-            id: 2
-        }
-    })
-    if(users !== null){
-       res.json(users)     
-    }else{
-        res.status(204)
-        throw new Error('User id returned Null')   
-    }
- })
-
 // $$ description
 //route    /api/users
 //$$ access public 
 
+const registerUser = asyncHandler( async (req,res,next ) =>{
+  //add error hanlder for when i cant connect to db and for when there is no user 
+  
+    try {
+        const userEmail = await prisma.user.findUnique({
+            where: {
+                id: 10
+            }
+        })
+        console.log('connected to DB')
 
-// ORIGINAL CODE, But now it is more readable in my opinionn
-
-// const registerUser = asyncHandler( async (req,res,next ) =>{
-//    const {name, email, password} = req.body
-   
-//     if(!name || !email || !password){
-//         res.status(400)
-//         throw new Error('Please include all fields')
-//     }else{
-//         try {
-//             //try inserting a user here// either.  reate a newfunction.s  
-//             const users = await prisma.user.findMany({})
-//             res.json(users)
-       
-//         } catch (error) {  
-//              //since I'm using ayncHandler, this is not needed. But lets leave it anywy
+        if( Object.keys(userEmail).length >= 1 ){
+            return res.json(userEmail)     
+         }
         
-//              next(error)
-//         }
-//     }   
-// })
+    } catch (error) {
+        res.status(400)
+        console.log(`Error: ${error.message}`)
+        throw new Error('No user with Such ID exists or Cant fetch DB data')
+    }
+
+       
+    
+ })
+
+
+
+
+
 
 // $$ description
 //route    /api/users
