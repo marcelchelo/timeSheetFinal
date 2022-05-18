@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcrypt')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
-
+const jwt = require('jsonwebtoken')
 
 // $$ description
 //route    /api/users
@@ -60,20 +60,20 @@ const registerUser = asyncHandler( async (req,res ) =>{
            }
         })
 
+        //if there is an user, generate a jwt token
+        if(user) {
+            res.status(201).json({
+                message : `${user.name}  Your account was created`,
+                token: generateToken(user.id)
+
+            }
+                )
+        }
+
         if( !user ){
             res.status(400)
             throw new Error(`User wasn't created for some reason `)
-         }
-
-        res.status(201).json(user.name + " Your account was created")
-
-        
-
-
-
-        
-     
-    
+         }    
  })
 
 
@@ -99,7 +99,9 @@ const loginUser = asyncHandler ( async (req,res) =>{
    if(user &&  await bcrypt.compare(password,user.password)){
         res.status(200).json({
             name: user.name,
-            id: user.id
+            id: user.id,
+            email: user.email,
+            token: generateToken(user.id),
         })
    }else{
        res.status(401)
@@ -108,6 +110,15 @@ const loginUser = asyncHandler ( async (req,res) =>{
    }
 
 })
+
+
+//Generate token using JWT
+
+function generateToken (id) {
+    return jwt.sign({id}, process.env.JWT_SECRET, {
+        expiresIn: '8h'
+    })
+}
 
 module.exports = {
     registerUser,
