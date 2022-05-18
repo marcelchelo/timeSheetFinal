@@ -60,7 +60,12 @@ const registerUser = asyncHandler( async (req,res ) =>{
            }
         })
 
-        res.status(200).json("User Created")
+        if( !user ){
+            res.status(400)
+            throw new Error(`User wasn't created for some reason `)
+         }
+
+        res.status(201).json(user.name + " Your account was created")
 
         
 
@@ -82,7 +87,25 @@ const registerUser = asyncHandler( async (req,res ) =>{
 //route    /api/users
 //$$ access public 
 const loginUser = asyncHandler ( async (req,res) =>{
-    res.send('Login Routes')
+   const {email, password} = req.body
+
+   const user = await prisma.user.findUnique({
+       where:{
+           email : email
+       }
+   })
+
+   //check if user exist and user's  password matches the one in database. 
+   if(user &&  await bcrypt.compare(password,user.password)){
+        res.status(200).json({
+            name: user.name,
+            id: user.id
+        })
+   }else{
+       res.status(401)
+       throw new Error('Invalid Credentials')
+
+   }
 
 })
 
