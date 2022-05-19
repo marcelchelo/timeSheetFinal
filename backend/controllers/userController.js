@@ -68,7 +68,7 @@ const registerUser = asyncHandler( async (req,res ) =>{
 
             }
                 )
-        }
+        }//put below code in an else  statement instead. And test it. 
 
         if( !user ){
             res.status(400)
@@ -112,6 +112,13 @@ const loginUser = asyncHandler ( async (req,res) =>{
 })
 
 
+//Route     /api/users/dashboard
+const userDashboard =  asyncHandler( async( req ,res )=> {
+    res.status(200).json(req.user)
+
+})
+
+
 //Generate token using JWT
 
 function generateToken (id) {
@@ -123,5 +130,6 @@ function generateToken (id) {
 module.exports = {
     registerUser,
     loginUser,
-    checkUser
+    checkUser,
+    userDashboard
 }
