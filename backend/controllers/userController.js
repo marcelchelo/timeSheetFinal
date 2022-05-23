@@ -9,11 +9,11 @@ const jwt = require('jsonwebtoken')
 //$$ access public 
 
 const checkUser = asyncHandler( async(req,res, next) =>{
-    const {name, email, password} = req.body
+    const {name, email, password, companyName} = req.body
    
     //validation 
 
-    if(!name || !email || !password){
+    if(!name || !email || !password || !companyName){
         res.status(400)
         throw new Error('Please include all fields')
     }
@@ -33,6 +33,8 @@ const registerUser = asyncHandler( async (req,res ) =>{
     const searchEmail = req.body.email
     const password = req.body.password
     const name =req.body.name
+    const companyName = req.body.companyName
+    
     
         const userExists = await prisma.user.findUnique({
             where: {
@@ -56,14 +58,15 @@ const registerUser = asyncHandler( async (req,res ) =>{
            data:{
                name: name,
                email:searchEmail,
-               password:haschedPassword
+               password:haschedPassword,
+               companyName: companyName
            }
         })
 
         //if there is an user, generate a jwt token
         if(user) {
             res.status(201).json({
-                message : `${user.name}  Your account was created`,
+                message : `${user.companyName}  Your account was created`,
                 token: generateToken(user.id)
 
             }
