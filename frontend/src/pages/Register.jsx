@@ -27,6 +27,7 @@ function Register (){
             toast.error("passowords do not match")
         }
 
+
     }
 
 
@@ -45,34 +46,34 @@ function Register (){
 
             <div className='form-group'>
                 <input className='form-control'
-                type='text' id='companyName' name='companyName' value={companyName} onChange={onChange} placeholder='Business Name'>
+                type='text' id='companyName' name='companyName' value={companyName} onChange={onChange} placeholder='Business Name' required>
                 </input>
 
             </div>
 
             <div className='form-group'>
                 <input className='form-control'
-                type='text' id='name' name='name' value={name} onChange={onChange} placeholder='Enter Your name'>
+                type='text' id='name' name='name' value={name} onChange={onChange} placeholder='Enter Your name' required>
                 </input>
 
             </div>
 
             <div className='form-group'>
                 <input className='form-control'
-                type='email' id='email' name='email' value={email} onChange={onChange} placeholder='Enter Your email'>
+                type='email' id='email' name='email' value={email} onChange={onChange} placeholder='Enter Your email' required>
                 </input>
 
             </div>
             <div className='form-group'>
                 <input className='form-control'
-                type='password' id='password' name='password' value={password} onChange={onChange} placeholder='Enter Your Password'>
+                type='password' id='password' name='password' value={password} onChange={onChange} placeholder='Enter Your Password' required>
                 </input>
 
             </div>
 
             <div className='form-group'>
                 <input className='form-control'
-                type='password' id='password2' name='password2' value={password2} onChange={onChange} placeholder='Confirm Password'>
+                type='password' id='password2' name='password2' value={password2} onChange={onChange} placeholder='Confirm Password' required>
                 </input>
 
             </div>
