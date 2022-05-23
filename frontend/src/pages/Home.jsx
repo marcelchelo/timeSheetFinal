@@ -15,8 +15,6 @@ function Home (){
             <Link to="/dashboard/users" className='btn btn-block btn-reverse'> <FaHardHat/> Search by Workers</Link> 
 
             <Link to="/dashboard/" className='btn btn-block btn-reverse'  > <FaDigitalTachograph/> Search by Sites</Link> 
-
-
             </div>
         </section>
         </>
