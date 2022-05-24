@@ -1,11 +1,12 @@
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {FaUser} from 'react-icons/fa'
 import {toast} from 'react-toastify'
 //select anything from global state
 import {useSelector} from 'react-redux'
 //dispatch our action
 import {useDispatch} from 'react-redux'
-import {register} from '../features/auth/authSlice'
+import {register, reset} from '../features/auth/authSlice'
 
 
 function Register (){
@@ -20,10 +21,29 @@ function Register (){
     const {companyName, name, email, password, password2} = formData
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     
     //get current values from global state
 
     const {user, isError, isSuccess, isLoading, message} = useSelector(state => state.auth)
+
+     useEffect(()=>{
+        if(isError){
+            
+            toast.error(message)
+        }
+        if(isSuccess || user){
+             
+            console.log('it was a sccess user created')
+            navigate('/')
+            
+             
+        }
+
+        dispatch(reset())
+
+    },[isError,isSuccess,user,message,navigate,dispatch])
+
     const onChange =(e) =>{
         setFormData( (prevState) => ({
             ...prevState,
