@@ -34,10 +34,9 @@ function Register (){
         }
         if(isSuccess || user){
              
-            console.log('it was a sccess user created')
             navigate('/')
             
-             
+
         }
 
         dispatch(reset())
