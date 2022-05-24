@@ -1,4 +1,6 @@
 import {useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {login} from '../features/auth/authSlice'
 
 function Login (){
     //defaults
@@ -16,8 +18,20 @@ function Login (){
         }) )
     }
 
+    const dispatch = useDispatch()
+    const {user, isError, isSuccess, isLoading, message} = useSelector(state => state.auth)
+
+
     const onSubmit = (e)=>{
         e.preventDefault()
+
+
+        const userData = {
+            //comes from form data Ln 12
+            email,
+           password 
+        }
+        dispatch(login(userData))
     }
 
     return(
