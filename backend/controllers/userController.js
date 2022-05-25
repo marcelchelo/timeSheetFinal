@@ -80,12 +80,6 @@ const registerUser = asyncHandler( async (req,res ) =>{
  })
 
 
-
-
-
-
-
-
 // $$ description
 //route    /api/users
 //$$ access public 
