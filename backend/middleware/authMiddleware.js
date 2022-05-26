@@ -18,6 +18,11 @@ const protect = asyncHandler(async (req,res,next) => {
 
             //verify token 
             const decoded = jwt.verify(token,process.env.JWT_SECRET)
+
+            //make userID from JWT available in the next() function 
+            req.userID = decoded.id
+
+            
             //Get user from token
             req.user =  await prisma.user.findUnique({
                 where: {
