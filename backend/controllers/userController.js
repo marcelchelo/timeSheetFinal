@@ -35,6 +35,7 @@ const registerUser = asyncHandler( async (req,res ) =>{
     const name =req.body.name
     const companyName = req.body.companyName
     
+    //console.log(req.body)
     
         const userExists = await prisma.user.findUnique({
             where: {
