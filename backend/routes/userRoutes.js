@@ -13,6 +13,8 @@ router.post('/login', loginUser)
 
 //protected route
 
+
+//remove this 
 router.get('/dashboard', protect  ,userDashboard)
 
 module.exports = router
