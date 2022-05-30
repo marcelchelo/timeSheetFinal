@@ -1,39 +1,3 @@
-// const asyncHandler = require('express-async-handler')
-
-// // we get the token of the user that either logged in or signed up 
-
-
-
-
-// // Get list of all sites
-// //@ route  GET/api/sites
-// //@ access is Private
-
-// const getSites = asyncHandler(async (req,res) =>{
-//     res.status(200).json({message: "get Sites"})
-// })
-
-
-
-// //create new Site 
-// //@ route  POST/api/sites
-// //@ access is Private
-// const createSite = asyncHandler(async (req,res) =>{
-//     res.status(200).json({message:"create Site"})
-// })
-
-
-// module.exports = {
-//     createSite,
-//     getSites
-// }
-
-// //view all workers
-
-
-// // view 
-
-
 const asyncHandler = require('express-async-handler')
 
 const { PrismaClient } = require('@prisma/client')
@@ -42,6 +6,8 @@ const prisma = new PrismaClient()
 
 
 //Get All sites
+//@ /api/dash/getSite
+//private
 const getSites = asyncHandler(async(req,res) =>{
     
 
@@ -64,6 +30,14 @@ const getSites = asyncHandler(async(req,res) =>{
     res.status(200).json({Sites: sites})
     //find all where user id is same as the requested user
 }) 
+
+
+//GET Single Site.   Display all workers there 
+// @ /api/dash/sites/:siteID
+
+const getSite = asyncHandler(async (req,res)=>{
+    res.status(201).json({message: `Get workers `})
+})
 
 
 //post
@@ -102,5 +76,6 @@ const delSite = asyncHandler(async(req,res) =>{
 module.exports = {
     getSites,
     createSite,
-    delSite
+    delSite,
+    getSite
 }

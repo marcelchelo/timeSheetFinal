@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  email        String?        @unique @db.VarChar(255)
+  password     String         @unique(map: "password") @db.VarChar(255)
+  name         String?
+  companyName  String
+  fingerDevice FingerDevice[]
+}
+
+model FingerDevice {
+  id             Int              @default(autoincrement())
+  siteName       String
+  userID         Int
+  user           User             @relation(fields: [userID], references: [id])
+  transactions   Transactions[]
+  workerToDevice WorkerToDevice[]
+
+  @@id([id, siteName, userID])
+  @@index([userID], map: "FingerDevice_userID_fkey")
+}
+
+model Worker {
+  id             Int              @id @default(autoincrement())
+  lastName       String
+  name           String
+  phone          String           @unique @db.VarChar(15)
+  role           String?          @db.VarChar(20)
+  rate           Decimal          @default(15.000000000000000000000000000000)
+  active         Boolean          @default(true)
+  transactions   Transactions[]
+  workerToDevice WorkerToDevice[]
+}
+
+model WorkerToDevice {
+  workerID Int
+  devID    Int
+  fingerID Int?
+  device   FingerDevice @relation(fields: [devID], references: [id])
+  worker   Worker       @relation(fields: [workerID], references: [id])
+
+  @@id([workerID, devID])
+  @@index([devID], map: "WorkerToDevice_devID_fkey")
+}
+
+model Transactions {
+  workerID   Int
+  locationID Int
+  inOut       String       @default("Present")
+  datetime   DateTime     @default(now())
+  location   FingerDevice @relation(fields: [locationID], references: [id])
+  worker     Worker       @relation(fields: [workerID], references: [id])
+
+  @@id([workerID,locationID,inOut])
+}

@@ -34,7 +34,7 @@ const protect = asyncHandler(async (req,res,next) => {
                 }
             })
 
-            console.log(req.user.email  + " Has accesses a protected route.  Ln31   authmiddleware.js")
+            console.log(req.user.email  + " Authenticated, has access to protected route.  Ln31   authmiddleware.js")
 
             next()
         } catch (error) {

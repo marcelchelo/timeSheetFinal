@@ -9,9 +9,10 @@ const {protect} = require ('../middleware/authMiddleware')
 
 router.post('/', checkUser ,registerUser) 
 
+
 router.post('/login', loginUser)
 
-//protected route
+
 
 
 //remove this 
