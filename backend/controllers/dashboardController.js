@@ -35,8 +35,29 @@ const getSites = asyncHandler(async(req,res) =>{
 //GET Single Site.   Display all workers there 
 // @ /api/dash/sites/:siteID
 
-const getSite = asyncHandler(async (req,res)=>{
-    res.status(201).json({message: `Get workers `})
+const workersAtSite = asyncHandler(async (req,res)=>{
+     const siteID = +req.params.siteID
+       
+
+     const workersAtSiteID = await prisma.workerToDevice.findMany({
+         where : {
+             devID : siteID,
+         },
+         select :{
+             worker: {
+                 select:{
+                    name: true,
+                    lastName: true,
+                    phone:true,
+                    role: true,
+                 }
+             }
+         }
+     })
+
+     //output names
+    console.log(workersAtSiteID)
+    res.status(201).json(workersAtSiteID)
 })
 
 
@@ -77,5 +98,5 @@ module.exports = {
     getSites,
     createSite,
     delSite,
-    getSite
+    workersAtSite
 }
